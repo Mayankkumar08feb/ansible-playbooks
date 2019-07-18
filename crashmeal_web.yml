@@ -1,0 +1,54 @@
+---
+ - hosts: all
+   remote_user: mayank
+   become: true
+   vars_files:
+    - vars.yml
+   tasks:
+     - name: install epel-release
+       yum: name=epel-release update_cache=yes state=present
+     - name: install httpd
+       yum: name=httpd update_cache=yes state=latest
+     - name: install SSL Configuration packages 
+       yum: name=openssl update_cache=yes state=latest
+     - name: install SSL Configuration dependency packages
+       yum: name=mod_ssl  update_cache=yes state=latest
+     - name: Create Folder
+       file: 
+         path: /etc/ssl/29-June-2019
+         state: directory
+     - name: Ansible copy multiple files with_items
+       copy:
+         src: ~mayank/ssl/29-June-2019/{{item}}
+         dest: /etc/ssl/29-June-2019/{{item}}
+       with_items:
+         - COMODO_DV_SHA-256_bundle.crt
+         - STAR_crashmeal_com.crt
+         - STAR_crashmeal_com_key
+     - name: copy Document file to project dir on host machine
+       copy:
+        src: /home/mayank/test.html
+        dest: /var/www/html
+     - name: Backup original ssl.conf file
+       command: mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.org
+     - name: Need to Edit the ssl.conf file 
+       copy:
+        src: /home/mayank/ssl.conf
+        dest: /etc/httpd/conf.d/
+   handlers:
+     - name: restart Apache
+       service: name=httpd state=started enabled=yes
+     - name: Open port 80 for http access
+       firewalld:
+         service: http
+         permanent: true
+         state: enabled
+     - name: Open port 443 for http access
+       firewalld:
+         service: https
+         permanent: true
+         state: enabled
+     - name: Restart the firewalld service to load in the firewall changes
+       service: 
+         name: firewalld 
+         state: restarted
