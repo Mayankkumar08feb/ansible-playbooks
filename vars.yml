@@ -1,0 +1,16 @@
+---
+  apache_hosts:
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.webcrashmeal.com", documentroot: "/var/www/html", serveradmin: "webmaster@crashmeal.com"}
+       - {servername: "admin.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "api.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "auth.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - {servername: "www.crashmeal.com", documentroot: "/var/www/html"}
+       - name: restarting httpd services
