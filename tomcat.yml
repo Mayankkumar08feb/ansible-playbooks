@@ -1,0 +1,82 @@
+---
+ - hosts: all
+   remote_user: mayank
+   become: true
+   tasks:
+     - name: install epel-release
+       yum: 
+         name: epel-release 
+         update_cache: yes
+         state: present
+     - name: yum install -y wget httpd php gcc glibc glibc-common gd gd-devel make net-snmp unzip
+       yum: 
+        name: "{{ item }}"
+        state: present
+       with_items:
+         wget
+         tmux
+         unzip
+         curl
+         git
+         tree
+     - name: install java-1.8.0-openjdk.x86_64
+       yum: 
+         name: java-1.8.0-openjdk.x86_64 
+         update_cache: yes
+         state: latest
+
+     - name: Group add tomcat
+       group:
+         name: tomcat
+         state: present
+     - name: Add "tomcat" user
+       user:
+         name: tomcat
+         group: tomcat
+         home: /usr/share/tomcat
+         createhome: no
+         system: yes
+     - name: Create Folder
+       file: 
+         path: /opt/tomcat
+         state: directory
+         owner: tomcat
+         group: tomcat
+
+     - name: Download Tomcat
+       get_url:
+         url: "{{ tomcat_archive_url }}"
+         dest: "{{ tomcat_archive_d }}" 
+     - name: Extract tomcat archive
+       unarchive:
+         src: "{{ tomcat_archive_dest }}"
+         dest: /usr/share/tomcat
+         owner: tomcat
+         group: tomcat
+         remote_src: yes
+         extra_opts: "--strip-components=1"
+         creates: /usr/share/tomcat/bin
+     - name: Copy tomcat service file
+       template:
+         src: templates/tomcat.service.j2
+         dest: /etc/systemd/system/tomcat.service
+       when: ansible_service_mgr == "systemd"
+   handlers:
+     - name: Start and enable tomcat
+       service:
+         daemon_reload: yes
+         name: tomcat
+         state: started
+         enabled: yes
+       when: ansible_service_mgr == "systemd"
+     - name: Open port 8080 for http access
+       firewalld:
+         port: 8080/tcp
+         permanent: true
+         state: enabled
+         immediate: yes
+       when: ansible_service_mgr == "systemd"
+     - name: Restart the firewalld service to load in the firewall changes
+       service: 
+         name: firewalld 
+         state: restarted
