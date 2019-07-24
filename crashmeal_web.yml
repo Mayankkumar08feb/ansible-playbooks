@@ -17,6 +17,15 @@
        file: 
          path: /etc/ssl/29-June-2019
          state: directory
+     - name: Create Folder
+       file:
+         path: /etc/httpd/sites-available
+         state: directory
+     - name: Create Folder
+       file:
+         path: /etc/httpd/sites-enabled
+         state: directory
+
      - name: Ansible copy multiple files with_items
        copy:
          src: ~mayank/ssl/29-June-2019/{{item}}
@@ -25,29 +34,68 @@
          - COMODO_DV_SHA-256_bundle.crt
          - STAR_crashmeal_com.crt
          - STAR_crashmeal_com_key
+     - name: Ansible site-availble copy multiple files with_items
+       copy:
+         src: ~mayank/Ansible_script/apache-backup/sites-available/{{item}}
+         dest: /etc/httpd/sites-available/{{item}}
+       with_items:
+         - aa-crashmeal.com.conf
+         - aa-ssl-crashmeal.com.conf
+         - admin.crashmeal.com.conf
+         - admin.crashmeal.com_ssl.conf
+         - api.crashmeal.com.conf
+         - api.crashmeal.com_ssl.conf
+         - auth.crashmeal.com.conf
+         - auth.crashmeal.com_ssl.conf
+         - crashmeal.com.conf
+         - driver.crashmeal.com.conf
+         - driver.crashmeal.com_ssl.conf
+         - driver.crashmeal.com_ssl.conf-new-27-julu-2019
+         - partner.crashmeal.com.conf
+         - partner.crashmeal.com_ssl.conf
+         - ssl-crashmeal.com.conf
+         - www.crashmeal.com.conf
+         - www.noqcart.com.conf
+     - name: Ansible sites-enabled copy multiple files with_items
+       copy:
+         src: ~mayank/Ansible_script/apache-backup/sites-enabled/{{item}}
+         dest: /etc/httpd/sites-enabled/{{item}}
+       with_items:
+         - aa-crashmeal.com.conf
+         - aa-ssl-crashmeal.com.conf
+         - admin.crashmeal.com.conf
+         - admin.crashmeal.com_ssl.conf
+         - api.crashmeal.com.conf
+         - api.crashmeal.com_ssl.conf
+         - auth.crashmeal.com.conf
+         - auth.crashmeal.com_ssl.conf
+         - driver.crashmeal.com.conf
+         - driver.crashmeal.com_ssl.conf
+         - partner.crashmeal.com.conf
+         - partner.crashmeal.com_ssl.conf
+         - www.noqcart.com.conf
+
      - name: copy Document file to project dir on host machine
        copy:
-        src: /home/mayank/test.html
+        src: ~/test.html
         dest: /var/www/html
-     - name: Backup original ssl.conf file
-       command: mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.org
-     - name: Need to Edit the ssl.conf file 
-       copy:
-        src: /home/mayank/ssl.conf
-        dest: /etc/httpd/conf.d/
-   handlers:
-     - name: restart Apache
-       service: name=httpd state=started enabled=yes
-     - name: Open port 80 for http access
-       firewalld:
-         service: http
-         permanent: true
-         state: enabled
      - name: Open port 443 for http access
        firewalld:
          service: https
          permanent: true
          state: enabled
+       notify:
+         - restart apache
+     - name: restart httpd
+       service:
+         name: httpd
+         state: restarted
+
+#     - name: Open port 80 for http access
+#       firewalld:
+#         service: http
+#         permanent: true
+#         state: enabled
      - name: Restart the firewalld service to load in the firewall changes
        service: 
          name: firewalld 
