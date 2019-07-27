@@ -1,0 +1,8 @@
+---
+# tasks file for role_new
+#Include Variable and define needed Variable 
+- name: Include variable
+  include_vars: vars.yml
+
+- name: Include task
+  include_tasks: crashmeal_web.yml

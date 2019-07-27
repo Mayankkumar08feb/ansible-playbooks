@@ -1,0 +1,118 @@
+---
+- name: install epel-release
+  yum: name=epel-release update_cache=yes state=present
+- name: install httpd
+  yum: name=httpd update_cache=yes state=latest
+- name: install SSL Configuration packages 
+  yum: name=openssl update_cache=yes state=latest
+- name: install SSL Configuration dependency packages
+  yum: name=mod_ssl  update_cache=yes state=latest
+- name: Create Folder
+  file: 
+    path: /etc/ssl/29-June-2019
+    state: directory
+- name: Create Folder
+  file:
+    path: /etc/httpd/sites-available
+    state: directory
+- name: Create Folder
+  file:
+    path: /etc/httpd/sites-enabled
+    state: directory
+
+- name: Ansible copy multiple files with_items
+  copy:
+    src: certs/{{ item }}
+    dest: /etc/ssl/29-June-2019/{{ item }}
+  with_items:
+     - COMODO_DV_SHA-256_bundle.crt
+     - STAR_crashmeal_com.crt
+     - STAR_crashmeal_com_key
+- name: Ansible site-availble copy multiple files with_items
+  copy:
+    src: sites-available/{{ item }}
+    dest: /etc/httpd/sites-available/{{ item }}
+  with_items:
+    - aa-crashmeal.com.conf
+    - aa-ssl-crashmeal.com.conf
+    - admin.crashmeal.com.conf
+    - admin.crashmeal.com_ssl.conf
+    - api.crashmeal.com.conf
+    - api.crashmeal.com_ssl.conf
+    - auth.crashmeal.com.conf
+    - auth.crashmeal.com_ssl.conf
+    - crashmeal.com.conf
+    - driver.crashmeal.com.conf
+    - driver.crashmeal.com_ssl.conf
+    - driver.crashmeal.com_ssl.conf-new-27-julu-2019
+    - partner.crashmeal.com.conf
+    - partner.crashmeal.com_ssl.conf
+    - ssl-crashmeal.com.conf
+    - www.crashmeal.com.conf
+    - www.noqcart.com.conf
+- name: Ansible sites-enabled copy multiple files with_items
+  copy:
+    src: sites-enabled/{{ item }}
+    dest: /etc/httpd/sites-enabled/{{ item }}
+  with_items:
+    - aa-crashmeal.com.conf
+    - aa-ssl-crashmeal.com.conf
+    - admin.crashmeal.com.conf
+    - admin.crashmeal.com_ssl.conf
+    - api.crashmeal.com.conf
+    - api.crashmeal.com_ssl.conf
+    - auth.crashmeal.com.conf
+    - auth.crashmeal.com_ssl.conf
+    - driver.crashmeal.com.conf
+    - driver.crashmeal.com_ssl.conf
+    - partner.crashmeal.com.conf
+    - partner.crashmeal.com_ssl.conf
+    - www.noqcart.com.conf
+
+- name: copy ssl.conf in httpd servcie folder
+  copy:
+    src: ssl.conf
+    dest: /etc/httpd/conf.d/
+  notify:
+    - restart httpd
+- name: copy Document file to project dir on host machine
+  copy:
+    src: ~/test.html
+    dest: /var/www/html
+- name: Open port 443 for http access
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  notify:
+    - restart firewalld
+#     - name: restart httpd
+#     - name: restart httpd
+- name: Open port 443 for http access
+  firewalld:
+    service: https
+    permanent: true
+    state: enabled
+  notify:
+    - restart firewalld
+- name: start httpd service
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  notify:
+    - restart httpd
+#     - name: restart httpd
+#       service:
+#         name: httpd
+#         state: restarted
+
+#     - name: Open port 80 for http access
+#       firewalld:
+#         service: http
+#         permanent: true
+#         state: enabled
+#- name: Restart the firewalld service to load in the firewall changes
+#       service: 
+#         name: firewalld 
+#         state: restarted

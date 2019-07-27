@@ -1,0 +1,19 @@
+# Ansible managed
+
+<VirtualHost *:80>
+  ServerName www.crashmeal.com
+  ServerAdmin sunil.gadgil@noqcart.com
+  ServerAlias crashmeal.com
+  DocumentRoot /var/www/html/www.crashmeal.com
+  DirectoryIndex index.html
+  ErrorLog /var/log/httpd/www.crashmeal.com/error.log
+  CustomLog /var/log/httpd/www.crashmeal.com/access.log combined
+  Redirect  / https://www.crashmeal.com
+
+
+  <Directory "/var/www/html/www.crashmeal.com">
+    AllowOverride All
+    Options -Indexes +FollowSymLinks
+    Require all granted
+  </Directory>
+</VirtualHost>
