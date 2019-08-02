@@ -1,0 +1,63 @@
+---
+- name: ensure a list of packages installed
+  package:
+    name: "{{ apache_packages }}"
+    state: "{{ apache_packages_state }}"
+
+- name: Creating folder for ssl  file
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ folder_name }}"
+
+- name: Ansible copy ssl certifacte files
+  copy:
+    src: certs/{{ item }}
+    dest: "{{ File_Certs}}/{{ item }}"
+  with_items: "{{ File_SSLName }}"
+
+- name: Create Folder in Document Dir
+  file:
+    path: "{{ File_path }}/{{ item }}"
+    state: directory
+  with_items: "{{ File_Name }}"
+
+- name: Ansible site-availble copy multiple files with_items
+  copy:
+    src: sites-available/{{ item }}
+    dest: "{{ File_site_avaialble }}/{{ item }}"
+  with_items: "{{ File_Name }}"
+
+- name: Ansible sites-enabled copy multiple files
+  copy:
+    src: sites-enabled/{{ item }}
+    dest: "{{ File_sites_enabled }}/{{ item }}"
+  with_items: "{{ File_Name }}"
+  notify:
+    - restart httpd
+- name: copy Document file to project dir on host machine
+  copy:
+    src: ~/test.html
+    dest: /var/www/html
+- name: Open port 443 for http access
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  notify:
+    - restart firewalld
+- name: Open port 443 for http access
+  firewalld:
+    service: https
+    permanent: true
+    state: enabled
+  notify:
+    - restart firewalld
+- name: start httpd service
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  notify:
+    - restart httpd

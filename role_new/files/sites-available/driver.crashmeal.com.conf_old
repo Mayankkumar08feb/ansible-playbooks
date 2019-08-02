@@ -1,0 +1,22 @@
+# Ansible managed
+
+<VirtualHost *:80>
+  ServerName driver.crashmeal.com
+  ServerAdmin sunil.gadgil@noqcart.com
+  ServerAlias driver.crashmeal.com
+  DocumentRoot /var/www/html/driver.crashmeal.com
+  DirectoryIndex index.html
+  ErrorLog /var/log/httpd/driver.crashmeal.com/error.log
+  CustomLog /var/log/httpd/driver.crashmeal.com/access.log combined
+  ProxyRequests off
+  ProxyPass / https://localhost:9443/CrashMealapp
+  ProxyPassReverse / https://localhost:9443/CrashMealapp
+
+
+
+  <Directory "/var/www/html/driver.crashmeal.com">
+    AllowOverride All
+    Options -Indexes +FollowSymLinks
+    Require all granted
+  </Directory>
+</VirtualHost>

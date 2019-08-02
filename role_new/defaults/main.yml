@@ -1,2 +1,17 @@
 ---
 # defaults file for role_new
+apache_packages_state: latest
+
+
+File_Certs: /etc/ssl/29-June-2019
+File_site_avaialble: /etc/httpd/sites-available/
+File_sites_enabled: /etc/httpd/sites-enabled/
+File_path: /var/www/html
+
+
+folder_name:
+  - /etc/ssl/29-June-2019
+  - "{{ File_site_avaialble }}"
+  - "{{ File_sites_enabled }}"
+
+

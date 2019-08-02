@@ -1,0 +1,24 @@
+<VirtualHost *:443>
+    ServerName www.crashmeal.com
+    ServerAlias crashmeal.com
+    DocumentRoot /var/www/html/crashmeal.com/
+    ErrorLog /var/log/httpd/crashmeal.com/error_log
+    CustomLog /var/log/httpd/crashmeal.com/access_log combined
+
+ProxyRequests On
+        ProxyPass /crashmeal  http://172.31.9.36:8080/crashmeal/
+        ProxyPassReverse /crashmeal http://172.31.9.36:8080/crashmeal/
+
+        <Location "/crashmeal">
+        Order allow,deny
+        Allow from all
+        </Location>
+
+
+  
+SSLEngine on
+  SSLCertificateFile /etc/ssl/certs/star_crashmeal_com.crt
+  SSLCertificateKeyFile /etc/ssl/private/www_crashmeal_com.key
+  SSLCertificateChainFile /etc/ssl/certs/DigiCertCA.crt
+
+</VirtualHost>
