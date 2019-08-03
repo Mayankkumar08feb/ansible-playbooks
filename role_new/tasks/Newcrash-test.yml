@@ -1,0 +1,6 @@
+---
+- name: ensure a list of packages installed
+  package:
+    name: "{{ apache_packages }}"
+    state: "{{ apache_packages_state }}"
+
