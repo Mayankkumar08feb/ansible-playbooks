@@ -1,0 +1,8 @@
+---
+# tasks file for Apache_rolebase_script
+- name: Include variable
+  include_vars: main.yml
+
+- name: Include task
+  include_tasks: Apache-setup
+

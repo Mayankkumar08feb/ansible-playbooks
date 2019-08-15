@@ -1,0 +1,11 @@
+---
+- name: Replace a localhost entry with our own
+  template:
+    path: /etc/host
+    regexp: '^ {{ ansible_all_ipv4_address }}"
+    line: "{{ ansible_all_ipv4_address }}  {{ item }}"
+    insertafter: '^{{ ansible_all_ipv4_address }} 
+    owner: root
+    group: root
+    mode: '0644'
+  with_items: "{{ documents_filename }}"

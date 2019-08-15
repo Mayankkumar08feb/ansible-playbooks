@@ -1,0 +1,29 @@
+---
+# vars file for Apache_rolebase_script
+apache_packages:
+  - "epel-release"
+  - "httpd"
+  - "openssl"
+  - "mod_ssl"
+
+apache_package_state: latest
+
+files_SSLname: 
+  - COMODO_DV_SHA-256_bundle.crt
+  - STAR_crashmeal_com.crt
+  - STAR_crashmeal_com_key
+
+documents_filename:
+  - www.crashmeal.com
+  - admin.crashmeal.com
+  - api.crashmeal.com
+  - auth.crashmeal.com
+  - copycrashmeal.com
+  - crashmeal.com
+  - driver.crashmeal.com
+  - partner.crashmeal.com
+  - www.noqcart.com
+  - testwww.crashmeal.com
+
+
+

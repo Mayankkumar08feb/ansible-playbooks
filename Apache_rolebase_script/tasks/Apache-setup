@@ -1,0 +1,13 @@
+---
+#- name: print ip address
+#  debug:
+#    msg: system ip is "{{ ansible_all_ipv4_address }}"
+
+- name: Ensure a list of Packages are installed in host Machine
+  package:
+    name: "{{ apache_packages }}"
+    state: "{{ apache_package_state }}"
+
+- name: Include task
+  include_tasks: SSL-config
+

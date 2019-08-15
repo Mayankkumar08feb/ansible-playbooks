@@ -1,43 +1,96 @@
 ---
-- name: ensure a list of packages installed
+- name: print ip address
+  debug: 
+    msg: sytemip is {{ ansible_all_ipv4_addresses }}  
+  
+- name: Ensure a list of packages installed in Host Machine
   package:
     name: "{{ apache_packages }}"
     state: "{{ apache_packages_state }}"
 
-- name: Creating folder for ssl  file
+#################################################################
+#Setting Environment for SSL                                    #
+#################################################################
+
+- name: Creating folder for ssl  file in Host Machine
   file:
     path: "{{ item }}"
     state: directory
     recurse: yes
   with_items: "{{ folder_name }}"
 
-- name: Ansible copy ssl certifacte files
+- name: Placing ssl certifacte files in Host Machine
   copy:
     src: certs/{{ item }}
     dest: "{{ File_Certs}}/{{ item }}"
   with_items: "{{ File_SSLName }}"
 
-- name: Create Folder in Document Dir
+- name: Writing SSL.conf file in host
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  notify:
+    - restart httpd
+
+#################################################################
+#Placing Apache file in document Dir                            #
+#################################################################
+
+- name: Creating a Folder in Document Dir on Host Machine
   file:
     path: "{{ File_path }}/{{ item }}"
     state: directory
   with_items: "{{ File_Name }}"
 
-- name: Ansible site-availble copy multiple files with_items
-  copy:
-    src: sites-available/{{ item }}
-    dest: "{{ File_site_avaialble }}/{{ item }}"
+- name: Creating Folder in Apache log directory
+  file:
+    path: "{{ File_logpath }}/{{ item }}"
+    state: directory
   with_items: "{{ File_Name }}"
 
-- name: Ansible sites-enabled copy multiple files
-  copy:
-    src: sites-enabled/{{ item }}
-    dest: "{{ File_sites_enabled }}/{{ item }}"
+
+- name: Createing file accesslog
+  file:
+    path: "{{ File_logpath }}/{{ item }}/access_log"
+    state: touch
+  with_items:
+    - "{{ File_Name }}"
+
+- name: Createing file errorlog
+  file:
+    path: "{{ File_logpath }}/{{ item }}/error_log"
+    state: touch
+  with_items:
+    - "{{ File_Name }}"
+
+#- name: Ansible site-availble copy multiple files with_items
+#  copy:
+#    src: sites-available/{{ item }}
+#    dest: "{{ File_site_avaialble }}/{{ item }}"
+#  with_items: "{{ File_Name }}"
+
+- name: Creating Folder in Apache directory for site avaiable
+  file:
+    path: "{{ File_site_avaialble }}"
+    state: directory
+
+- name: Ansible creating a site-availble file 
+  template:
+    src:  file.available.j2 
+    dest: "/etc/httpd/sites-available/{{ item }}" 
   with_items: "{{ File_Name }}"
-  notify:
-    - restart httpd
+  
+#- name: Ansible sites-enabled copy multiple files
+#  copy:
+#    src: sites-enabled/{{ item }}
+#    dest: "{{ File_sites_enabled }}/{{ item }}.conf"
+#  with_items: "{{ File_Name }}"
+#  notify:
+#    - restart httpd
+ 
 - name: copy Document file to project dir on host machine
   copy:
+
     src: ~/test.html
     dest: /var/www/html
 - name: Open port 443 for http access

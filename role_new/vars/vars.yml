@@ -5,22 +5,24 @@ apache_packages:
   - "openssl"
   - "mod_ssl"
 
+
 File_Name:
-  - aa-crashmeal.com.conf
-  - aa-ssl-crashmeal.com.conf
-  - admin.crashmeal.com.conf
-  - admin.crashmeal.com_ssl.conf
-  - api.crashmeal.com.conf
-  - api.crashmeal.com_ssl.conf
-  - auth.crashmeal.com.conf
-  - auth.crashmeal.com_ssl.conf
-  - driver.crashmeal.com.conf
-  - driver.crashmeal.com_ssl.conf
-  - partner.crashmeal.com.conf
-  - partner.crashmeal.com_ssl.conf
-  - www.noqcart.com.conf
-  - testwww.crashmeal.com.conf
-  - testwww.crashmeal.com_ssl.conf
+  - www.crashmeal.com
+#  - aa-crashmeal.com
+#  - aa-ssl-crashmeal.com
+#  - admin.crashmeal.com
+#  - admin.crashmeal.com_ssl
+#  - api.crashmeal.com
+#  - api.crashmeal.com_ssl
+#  - auth.crashmeal.com
+#  - auth.crashmeal.com_ssl
+#  - driver.crashmeal.com
+#  - driver.crashmeal.com_ssl
+#  - partner.crashmeal.com
+#  - partner.crashmeal.com_ssl
+#  - www.noqcart.com
+#  - testwww.crashmeal.com
+#  - testwww.crashmeal.com_ssl
    
 
 File_SSLName:

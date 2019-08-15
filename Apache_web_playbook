@@ -1,0 +1,6 @@
+---
+  - name: Role base configuration for Apache-Web
+    hosts: all
+    become: yes
+    roles:
+      - Apache_rolebase_script

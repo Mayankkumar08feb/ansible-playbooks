@@ -1,0 +1,108 @@
+---
+task_file:
+  - Apache-setup
+  - Apache-config
+  - SSL-config
+  - firewalld-startup-config
+
+# defaults file for Apache_rolebase_script
+folder_name:
+  - /etc/ssl/29-June-2019
+  - "{{ file_site_avaialble }}"
+  - "{{ file_site_enabled }}"
+
+file_site_avaialble: /etc/httpd/sites-available
+file_site_enabled: /etc/httpd/sites-enabled
+file_certs: /etc/ssl/29-June-2019
+SSLCertificateFile: /etc/ssl/29-June-2019/STAR_crashmeal_com.crt
+SSLCertificateKeyFile: /etc/ssl/29-June-2019/STAR_crashmeal_com_key
+SSLCACertificateFile: /etc/ssl/29-June-2019/COMODO_DV_SHA-256_bundle.crt
+SSL_filepath: /etc/httpd/conf.d
+
+document_filepath: /var/www/html
+
+webdir_logpath: /var/log/httpd
+
+
+apache_vhosts:
+  - servername: "www.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "tomcat.crashmeal.com"
+
+  - servername: "admin.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "admin.crashmeal.com"
+
+  - servername: "api.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "api.crashmeal.com"
+
+  - servername: "auth.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "auth.crashmeal.com"
+
+  - servername: "copycrashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "copycrashmeal.com"
+
+  - servername: "crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "crashmeal.com"
+
+  - servername: "driver.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "driver.crashmeal.com"
+
+  - servername: "partner.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "partner.crashmeal.com"
+
+  - servername: "www.noqcart.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "www.noqcart.com"
+
+  - servername: "testwww.crashmeal.com"
+    documentroot: "/var/www/html"
+    Error_Logfile: "error.log"
+    Error_Logpath: "/var/log/httpd"
+    tomcat_server: "testwww.crashmeal.com"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

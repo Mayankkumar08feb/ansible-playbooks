@@ -1,0 +1,30 @@
+{% for vhost in apache_vhosts %}
+<VirtualHost *:80>
+    ServerName {{ vhost.servername }}
+    ServerAlias {{ vhost.servername  }}
+    DocumentRoot {{ vhost.documentroot }}
+    ErrorLog {{ vhost.Error_Logpath }}/{{ vhost.servername }}/{{ vhost.Error_Logfile }}
+
+    CustomLog {{ vhost.Error_Logpath }}/{{ vhost.servername }}/access.log combined
+    RequestHeader set Front-End-Https "On"
+    Redirect / https://{{ vhost.servername }}/
+
+ <Directory {{ vhost.documentroot }}
+    AllowOverride All
+    Options +FollowSymLinks
+    Require all granted
+  </Directory>
+
+ProxyRequests Off
+        ProxyPass /crashmeal  http://{{ vhost.tomcat_server }}:8080/crashmeal/
+        ProxyPassReverse /crashmeal http://{{ vhost.tomcat_server }}
+
+        <Location "/crashmeal">
+        Order allow,deny
+        Allow from all
+        </Location>
+
+</VirtualHost>
+{% endfor %}
+
+

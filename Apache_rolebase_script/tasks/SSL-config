@@ -1,0 +1,27 @@
+---
+- name: Creating a folder for SSL and sites file in host machine
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ folder_name }}"
+
+- name: Placing ssl certifacte files in Host Machine
+  copy:
+    src: certs/{{ item }}
+    dest: "{{ file_certs }}/{{ item }}"
+  with_items: "{{ files_SSLname }}"
+
+- name: Writing SSL.conf file in host
+  template:
+    src: ssl.conf.j2
+    dest: "{{ SSL_filepath }}/ssl.conf"
+  notify:
+    - restart httpd
+
+- name: Include task
+  include_tasks: Apache-config
+
+
+
+
