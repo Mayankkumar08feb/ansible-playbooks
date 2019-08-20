@@ -41,16 +41,6 @@
   with_items:
     - "{{ documents_filename }}"
 
-#- name: Createing a file accesslog for each web-services
-#  file:
-#    path: "{{ file_site_avaialble }}/{{ item }}.conf"
-#    state: touch
-#  with_items: "{{ documents_filename }}"
-
-#- name: Ansible creating a site-availble file
-#  template:
-#    src: site-available.j2
-#    dest: "/etc/httpd/sites-available/www.crashmeal.com.conf"
 
 - name: Ansible creating a site-availble file
   template:
@@ -58,11 +48,6 @@
     dest: "/etc/httpd/sites-available/{{ item.servername }}.conf"
   with_items: "{{ apache_vhosts }}"
 
-#- name: Ansible creating a site-availble file
-#  template:
-#    src:  site-available.j2
-#    dest: "{{ file_site_avaialble }}/{{ item }}.conf"
-#  with_items: "{{ documents_filename }}"
 
 - name: Create a symbolic link
   file:
