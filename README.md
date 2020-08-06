@@ -7,7 +7,7 @@ Please complete the pre-request steps before excuting main playbook.
 Pre-Request:
 
 Steps:-
-        This playbook has been written base on SSL configuration. Need to plase your Certificate on Below mention Path and define it on variable file. steps are mention below.
+        This playbook has been written base on SSL configuration. Need to paste your Certificate on Below mention Path and define it on variable file. steps are mention below.
         
        
 Step1:-  Place you certificate on location 
